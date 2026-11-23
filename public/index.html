@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodBridge — Food that’s left. Hope that’s shared.</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Announcement Bar / Impact Ticker -->
+  <aside class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-left">
+        <span class="pulse-dot"></span>
+        <span id="live-rescue-ticker">Rescue Network Active: Connecting Surplus Food from Kitchens to People in Need</span>
+      </div>
+      <div class="top-bar-right">
+        <span class="badge badge-light" id="global-meals-badge">🍲 230+ Meals Rescued</span>
+        <button class="btn-text-light" onclick="app.resetDemoData()" title="Reset demo database to fresh sample records">🔄 Reset Demo Data</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Navigation Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <div class="brand-block" onclick="app.switchTab('explore')">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">FoodBridge</span>
+          <span class="brand-tagline">Food that’s left. Hope that’s shared.</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-links">
+        <button class="nav-btn active" data-tab="explore" onclick="app.switchTab('explore')">
+          <span class="icon">🍲</span> Available Food
+        </button>
+        <button class="nav-btn" data-tab="list-food" onclick="app.switchTab('list-food')">
+          <span class="icon">➕</span> List Food (Restaurant)
+        </button>
+        <button class="nav-btn" data-tab="claims-tracker" onclick="app.switchTab('claims-tracker')">
+          <span class="icon">🚚</span> NGO Pickups
+        </button>
+        <button class="nav-btn" data-tab="register-partner" onclick="app.switchTab('register-partner')">
+          <span class="icon">🏢</span> Register Partner
+        </button>
+        <!-- HIGHLIGHTED ALL ENTRIES TAB (User Requirement) -->
+        <button class="nav-btn nav-btn-highlight" data-tab="all-entries" onclick="app.switchTab('all-entries')">
+          <span class="icon">📊</span> ALL USER ENTRIES
+          <span class="nav-pill" id="total-entries-pill">0</span>
+        </button>
+        <button class="nav-btn" data-tab="safety-trust" onclick="app.switchTab('safety-trust')">
+          <span class="icon">🛡️</span> Safety & Trust
+        </button>
+        <button class="nav-btn" data-tab="impact" onclick="app.switchTab('impact')">
+          <span class="icon">📈</span> Impact
+        </button>
+      </nav>
+
+      <!-- Role Mode Selector -->
+      <div class="role-selector">
+        <label for="role-mode-select">Acting as:</label>
+        <select id="role-mode-select" onchange="app.onRoleChange(this.value)">
+          <option value="ngo">🤝 NGO / Shelter</option>
+          <option value="restaurant">👨‍🍳 Restaurant Partner</option>
+          <option value="admin">⚡ Platform Admin</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section & Slide 03 Workflow -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-badge">A Simple, Trusted Food Rescue System</div>
+      <h1 class="hero-title">Connecting Restaurants with NGOs to <span class="highlight">Rescue Surplus Food</span></h1>
+      <p class="hero-subtitle">
+        Every day, delicious, untouched food remains unused while community shelters struggle for meals.
+        <strong>FoodBridge</strong> matches surplus meals with nearby NGOs for swift, safe collection and delivery.
+      </p>
+
+      <!-- 4-Step Solution Flow from Slide 03 -->
+      <div class="workflow-steps">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h4>Restaurant lists food</h4>
+            <p>Food type, quantity, pickup time and location</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h4>NGO finds a match</h4>
+            <p>Nearby available listings are shown in real-time</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h4>NGO claims the food</h4>
+            <p>The restaurant confirms pickup & coordinates arrival</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h4>Meals reach people</h4>
+            <p>NGO collects and distributes fresh meals to those in need</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Impact Stat Bar (Slide 07) -->
+      <div class="hero-stats-bar">
+        <div class="stat-pill">
+          <span class="stat-val" id="stat-meals-rescued">0</span>
+          <span class="stat-lbl">Meals Rescued</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-pill">
+          <span class="stat-val" id="stat-active-listings">0</span>
+          <span class="stat-lbl">Available Right Now</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-pill">
+          <span class="stat-val" id="stat-restaurants-count">0</span>
+          <span class="stat-lbl">Partner Kitchens</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-pill">
+          <span class="stat-val" id="stat-ngos-count">0</span>
+          <span class="stat-lbl">Verified NGOs</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-pill">
+          <span class="stat-val" id="stat-co2-prevented">0 kg</span>
+          <span class="stat-lbl">CO₂ Emissions Prevented</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APPLICATION CONTENT TABS -->
+  <main class="container main-content">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: BROWSE SURPLUS FOOD (Slide 04 & 05) -->
+    <!-- ========================================== -->
+    <section id="tab-explore" class="tab-pane active">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Available Food for Pickup</h2>
+          <p class="section-desc">Fresh, safe surplus food listed by partner restaurants ready for immediate collection.</p>
+        </div>
+        <button class="btn btn-primary" onclick="app.switchTab('list-food')">
+          <span>➕</span> List Surplus Food
+        </button>
+      </div>
+
+      <!-- Filter and Search Toolbar -->
+      <div class="filter-card">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="explore-search" placeholder="Search by food name, restaurant, or area..." oninput="app.filterListings()">
+        </div>
+        <div class="filter-controls">
+          <select id="filter-category" onchange="app.filterListings()">
+            <option value="ALL">All Categories</option>
+            <option value="Cooked Meals">Cooked Meals</option>
+            <option value="Bakery & Breads">Bakery & Breads</option>
+            <option value="Fresh Produce">Fresh Produce</option>
+            <option value="Dairy & Beverages">Dairy & Beverages</option>
+            <option value="Packaged Food">Packaged Food</option>
+          </select>
+
+          <select id="filter-dietary" onchange="app.filterListings()">
+            <option value="ALL">All Dietary</option>
+            <option value="Vegetarian">Pure Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Non-Veg">Non-Vegetarian</option>
+          </select>
+
+          <select id="filter-status" onchange="app.filterListings()">
+            <option value="AVAILABLE">Available Only</option>
+            <option value="ALL">All Statuses (Inc. Claimed/Collected)</option>
+            <option value="CLAIMED">Claimed (En Route)</option>
+            <option value="COLLECTED">Collected / Distributed</option>
+          </select>
+
+          <button class="btn btn-secondary btn-sm" onclick="app.resetExploreFilters()">Reset</button>
+        </div>
+      </div>
+
+      <!-- Food Listing Cards Grid (Matches Slide 05 Format) -->
+      <div id="listings-grid" class="cards-grid">
+        <div class="loading-state">Loading active listings...</div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: LIST SURPLUS FOOD (Restaurant Form)  -->
+    <!-- ========================================== -->
+    <section id="tab-list-food" class="tab-pane">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Restaurant Food Listing Form</h2>
+          <p class="section-desc">Slide 04 & 05: List safe, untouched surplus food so nearby NGOs can make a quick pickup.</p>
+        </div>
+        <button class="btn btn-outline" onclick="app.switchTab('explore')">View Available Listings</button>
+      </div>
+
+      <div class="form-and-preview-grid">
+        <!-- Form Side -->
+        <div class="form-card">
+          <form id="food-listing-form" onsubmit="app.handleListingSubmit(event)">
+            
+            <h3 class="form-section-title">01. Restaurant Information</h3>
+            <div class="form-row">
+              <div class="form-group flex-2">
+                <label for="form-restaurant-select">Select Registered Restaurant *</label>
+                <select id="form-restaurant-select" required onchange="app.onSelectRestaurantForListing(this.value)">
+                  <option value="">-- Choose Partner Restaurant --</option>
+                </select>
+              </div>
+              <div class="form-group flex-1">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-secondary btn-full" onclick="app.switchTab('register-partner')">
+                  + Register New
+                </button>
+              </div>
+            </div>
+
+            <h3 class="form-section-title">02. Food Details (Slide 05)</h3>
+            <div class="form-row">
+              <div class="form-group flex-2">
+                <label for="form-food-name">Food Name / Items Description *</label>
+                <input type="text" id="form-food-name" required placeholder="e.g. Vegetable Pulao with Raita" oninput="app.updateLivePreview()">
+              </div>
+              <div class="form-group flex-1">
+                <label for="form-category">Category *</label>
+                <select id="form-category" required onchange="app.updateLivePreview()">
+                  <option value="Cooked Meals">Cooked Meals</option>
+                  <option value="Bakery & Breads">Bakery & Breads</option>
+                  <option value="Fresh Produce">Fresh Produce</option>
+                  <option value="Dairy & Beverages">Dairy & Beverages</option>
+                  <option value="Packaged Food">Packaged Food</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="form-quantity">Quantity / Number of Servings *</label>
+                <input type="number" id="form-quantity" min="1" required placeholder="e.g. 40" oninput="app.updateLivePreview()">
+              </div>
+              <div class="form-group">
+                <label for="form-quantity-unit">Servings Unit</label>
+                <select id="form-quantity-unit" onchange="app.updateLivePreview()">
+                  <option value="meal portions">meal portions</option>
+                  <option value="plates">plates</option>
+                  <option value="kg">kg (weight)</option>
+                  <option value="boxes">boxes / packets</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="form-dietary">Dietary Classification</label>
+                <select id="form-dietary" onchange="app.updateLivePreview()">
+                  <option value="Vegetarian">Pure Vegetarian</option>
+                  <option value="Vegan">Vegan</option>
+                  <option value="Non-Veg">Non-Vegetarian</option>
+                  <option value="Jain Food">Jain Friendly</option>
+                </select>
+              </div>
+            </div>
+
+            <h3 class="form-section-title">03. Time & Storage Details (Slide 05 & 06)</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="form-prepared-at">Prepared At *</label>
+                <input type="text" id="form-prepared-at" required placeholder="e.g. Today 6:00 PM" oninput="app.updateLivePreview()">
+              </div>
+              <div class="form-group">
+                <label for="form-pickup-deadline">Pickup By / Best Before *</label>
+                <input type="text" id="form-pickup-deadline" required placeholder="e.g. Today 8:00 PM" oninput="app.updateLivePreview()">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="form-storage-notes">Storage Notes & Temperature</label>
+                <input type="text" id="form-storage-notes" placeholder="e.g. Maintained hot in insulated warmer >65°C" oninput="app.updateLivePreview()">
+              </div>
+              <div class="form-group flex-1">
+                <label for="form-packaging">Packaging Status</label>
+                <select id="form-packaging" onchange="app.updateLivePreview()">
+                  <option value="Packed in food-grade containers">Packed in food-grade containers</option>
+                  <option value="Bring own stainless steel vessels">Bring own vessels / vessels needed</option>
+                  <option value="Individually boxed & packed">Individually boxed & packed</option>
+                  <option value="Cardboard crates & paper bags">Cardboard crates & paper bags</option>
+                </select>
+              </div>
+            </div>
+
+            <h3 class="form-section-title">04. Pickup Location & Contact</h3>
+            <div class="form-group">
+              <label for="form-pickup-address">Pickup Address *</label>
+              <textarea id="form-pickup-address" rows="2" required placeholder="Exact restaurant pickup location and gate..." oninput="app.updateLivePreview()"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="form-contact-person">Contact Person *</label>
+                <input type="text" id="form-contact-person" required placeholder="e.g. Chef Ramesh / Manager" oninput="app.updateLivePreview()">
+              </div>
+              <div class="form-group">
+                <label for="form-contact-phone">Contact Phone *</label>
+                <input type="text" id="form-contact-phone" required placeholder="e.g. +91 98201 12345" oninput="app.updateLivePreview()">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="form-special-instructions">Special Instructions for NGO Driver / Volunteer</label>
+              <input type="text" id="form-special-instructions" placeholder="e.g. Dispatch via back kitchen gate; park near loading ramp..." oninput="app.updateLivePreview()">
+            </div>
+
+            <!-- Slide 06 Safety Confirmation -->
+            <div class="safety-declaration-card">
+              <div class="checkbox-wrapper">
+                <input type="checkbox" id="form-safety-check" required>
+                <label for="form-safety-check">
+                  <strong>Food Safety & Hygiene Declaration (Slide 06):</strong>
+                  I confirm this surplus food was safely handled and stored under safe temperature control, is untouched and suitable for human donation, and complies with food-safety standards.
+                </label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-lg" id="submit-listing-btn">
+                <span>🚀</span> Publish Available Listing
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="app.populateSampleListingForm()">
+                Fill Slide 05 Example ("Vegetable Pulao")
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Live Preview Card Side -->
+        <div class="preview-side">
+          <div class="preview-header">
+            <h4>Live Listing Preview</h4>
+            <span class="badge badge-outline">What NGOs Will See</span>
+          </div>
+          <div class="preview-card-container">
+            <div class="listing-card sample-preview-card" id="live-preview-card">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+          <div class="preview-guidance">
+            <p>💡 <strong>Slide 05 Tip:</strong> A clear, informative food listing avoids confusion and accelerates pickup by nearby NGOs before food quality deteriorates.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: NGO CLAIMS & PICKUP TRACKER (Slide 04) -->
+    <!-- ========================================== -->
+    <section id="tab-claims-tracker" class="tab-pane">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Active NGO Claims & Pickup Coordination</h2>
+          <p class="section-desc">Slide 04: Track claimed food, manage pickup dispatch, and confirm final distribution to beneficiaries.</p>
+        </div>
+        <button class="btn btn-secondary" onclick="app.loadClaimsTracker()">🔄 Refresh Claims</button>
+      </div>
+
+      <div class="claims-summary-cards">
+        <div class="summary-card">
+          <span class="summary-num" id="claims-confirmed-count">0</span>
+          <span class="summary-lbl">Awaiting Pickup</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-num" id="claims-collected-count">0</span>
+          <span class="summary-lbl">Successfully Rescued</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-num" id="claims-servings-count">0</span>
+          <span class="summary-lbl">Servings Distributed</span>
+        </div>
+      </div>
+
+      <div class="claims-table-wrapper card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Claim ID</th>
+              <th>Food Item & Servings</th>
+              <th>Restaurant & Location</th>
+              <th>Claiming NGO</th>
+              <th>Volunteer & ETA</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="claims-table-body">
+            <tr><td colspan="7" class="loading-cell">Loading claims...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: PARTNER REGISTRATION (Slide 04)     -->
+    <!-- ========================================== -->
+    <section id="tab-register-partner" class="tab-pane">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Partner Organization Onboarding</h2>
+          <p class="section-desc">Slide 04: Join the FoodBridge network as a contributing restaurant or verified rescue NGO.</p>
+        </div>
+      </div>
+
+      <div class="partner-tabs">
+        <button class="sub-tab-btn active" id="subtab-btn-rest" onclick="app.switchPartnerSubtab('restaurant')">
+          👨‍🍳 Register Restaurant / Kitchen
+        </button>
+        <button class="sub-tab-btn" id="subtab-btn-ngo" onclick="app.switchPartnerSubtab('ngo')">
+          🤝 Register NGO / Shelter / Kitchen
+        </button>
+      </div>
+
+      <!-- Restaurant Signup Form -->
+      <div id="partner-form-rest" class="partner-form-pane active card">
+        <form onsubmit="app.handleRestaurantSubmit(event)">
+          <h3 class="form-section-title">Restaurant Profile Details</h3>
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="rest-name">Restaurant / Business Name *</label>
+              <input type="text" id="rest-name" required placeholder="e.g. Spice Symphony Kitchen & Banquets">
+            </div>
+            <div class="form-group flex-1">
+              <label for="rest-license">Food Safety / FSSAI License No.</label>
+              <input type="text" id="rest-license" placeholder="e.g. FSSAI-115200123984">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rest-contact">Contact Person *</label>
+              <input type="text" id="rest-contact" required placeholder="e.g. Chef Alok Kumar">
+            </div>
+            <div class="form-group">
+              <label for="rest-phone">Contact Phone *</label>
+              <input type="text" id="rest-phone" required placeholder="e.g. +91 98330 11223">
+            </div>
+            <div class="form-group">
+              <label for="rest-email">Email Address</label>
+              <input type="email" id="rest-email" placeholder="e.g. contact@spicesymphony.com">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="rest-address">Physical Kitchen Address *</label>
+              <input type="text" id="rest-address" required placeholder="Full street address and landmark">
+            </div>
+            <div class="form-group flex-1">
+              <label for="rest-city">City *</label>
+              <input type="text" id="rest-city" required placeholder="e.g. Mumbai">
+            </div>
+            <div class="form-group flex-1">
+              <label for="rest-area">Locality / Area</label>
+              <input type="text" id="rest-area" placeholder="e.g. Andheri East">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="rest-hours">Kitchen Operating Hours</label>
+            <input type="text" id="rest-hours" placeholder="e.g. 10:00 AM - 11:30 PM">
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Restaurant Profile</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- NGO Signup Form -->
+      <div id="partner-form-ngo" class="partner-form-pane card">
+        <form onsubmit="app.handleNgoSubmit(event)">
+          <h3 class="form-section-title">NGO / Shelter Profile Details</h3>
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="ngo-name">NGO / Community Organization Name *</label>
+              <input type="text" id="ngo-name" required placeholder="e.g. Annapurna Hunger Relief Foundation">
+            </div>
+            <div class="form-group flex-1">
+              <label for="ngo-reg">Registration / Trust / Tax-Exempt No. *</label>
+              <input type="text" id="ngo-reg" required placeholder="e.g. NGO-MH-2022-7712">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ngo-contact">Director / Coordinator Name *</label>
+              <input type="text" id="ngo-contact" required placeholder="e.g. Sunita Deshmukh">
+            </div>
+            <div class="form-group">
+              <label for="ngo-phone">Dispatch Contact Phone *</label>
+              <input type="text" id="ngo-phone" required placeholder="e.g. +91 98205 99001">
+            </div>
+            <div class="form-group">
+              <label for="ngo-email">Official Email</label>
+              <input type="email" id="ngo-email" placeholder="e.g. contact@annapurnarelief.org">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="ngo-address">Shelter / Center Address *</label>
+              <input type="text" id="ngo-address" required placeholder="Distribution center address...">
+            </div>
+            <div class="form-group flex-1">
+              <label for="ngo-city">City *</label>
+              <input type="text" id="ngo-city" required placeholder="e.g. Mumbai">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ngo-beneficiaries">Average Daily People / Meals Served</label>
+              <input type="number" id="ngo-beneficiaries" min="10" value="150" placeholder="e.g. 150">
+            </div>
+            <div class="form-group">
+              <label for="ngo-vehicle">Available Transport Vehicle for Food Rescue</label>
+              <select id="ngo-vehicle">
+                <option value="Insulated Delivery Van">Insulated Delivery Van</option>
+                <option value="Refrigerated Van">Refrigerated Van</option>
+                <option value="Small Auto / Mini-truck">Small Auto / Mini-truck</option>
+                <option value="Two-Wheelers with Thermal Crates">Two-Wheelers with Thermal Crates</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Register Verified NGO</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 5: 🌟 ALL USER ENTRIES & MASTER DATABASE (THE REQUEST) -->
+    <!-- ========================================================= -->
+    <section id="tab-all-entries" class="tab-pane">
+      <div class="master-entries-header">
+        <div class="header-content">
+          <div class="badge badge-accent">Platform Master Records</div>
+          <h2 class="section-title">All User Entries & Submissions</h2>
+          <p class="section-desc">
+            Complete database of all entries registered on FoodBridge: Surplus Food Listings, NGO Claim Requests, Registered Partner Restaurants, Registered NGOs, and System Activity Logs.
+          </p>
+        </div>
+        <div class="master-actions">
+          <button class="btn btn-secondary" onclick="app.exportEntriesCSV()">
+            <span>📥</span> Export to CSV
+          </button>
+          <button class="btn btn-secondary" onclick="app.exportEntriesJSON()">
+            <span>📄</span> Export to JSON
+          </button>
+          <button class="btn btn-primary" onclick="app.loadAllEntries()">
+            <span>🔄</span> Refresh Database
+          </button>
+        </div>
+      </div>
+
+      <!-- Master KPI Counters -->
+      <div class="master-stats-row">
+        <div class="m-stat-card">
+          <div class="m-stat-icon">🍲</div>
+          <div class="m-stat-info">
+            <span class="m-stat-val" id="m-stat-listings">0</span>
+            <span class="m-stat-lbl">Food Listings Entered</span>
+          </div>
+        </div>
+        <div class="m-stat-card">
+          <div class="m-stat-icon">🤝</div>
+          <div class="m-stat-info">
+            <span class="m-stat-val" id="m-stat-claims">0</span>
+            <span class="m-stat-lbl">Claims Submitted</span>
+          </div>
+        </div>
+        <div class="m-stat-card">
+          <div class="m-stat-icon">👨‍🍳</div>
+          <div class="m-stat-info">
+            <span class="m-stat-val" id="m-stat-restaurants">0</span>
+            <span class="m-stat-lbl">Restaurants Registered</span>
+          </div>
+        </div>
+        <div class="m-stat-card">
+          <div class="m-stat-icon">🏢</div>
+          <div class="m-stat-info">
+            <span class="m-stat-val" id="m-stat-ngos">0</span>
+            <span class="m-stat-lbl">NGOs Registered</span>
+          </div>
+        </div>
+        <div class="m-stat-card">
+          <div class="m-stat-icon">🕒</div>
+          <div class="m-stat-info">
+            <span class="m-stat-val" id="m-stat-logs">0</span>
+            <span class="m-stat-lbl">Audit Log Actions</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Subtabs (Listing, Claims, Restaurants, NGOs, Logs) -->
+      <div class="master-nav-tabs">
+        <button class="master-tab-btn active" data-sub="all-listings" onclick="app.switchMasterSubtab('all-listings')">
+          🍲 All Food Listings (<span id="count-sub-listings">0</span>)
+        </button>
+        <button class="master-tab-btn" data-sub="all-claims" onclick="app.switchMasterSubtab('all-claims')">
+          🤝 All NGO Claims (<span id="count-sub-claims">0</span>)
+        </button>
+        <button class="master-tab-btn" data-sub="all-restaurants" onclick="app.switchMasterSubtab('all-restaurants')">
+          👨‍🍳 Registered Restaurants (<span id="count-sub-restaurants">0</span>)
+        </button>
+        <button class="master-tab-btn" data-sub="all-ngos" onclick="app.switchMasterSubtab('all-ngos')">
+          🏢 Registered NGOs (<span id="count-sub-ngos">0</span>)
+        </button>
+        <button class="master-tab-btn" data-sub="all-logs" onclick="app.switchMasterSubtab('all-logs')">
+          🕒 Live Audit Trail (<span id="count-sub-logs">0</span>)
+        </button>
+      </div>
+
+      <!-- Search & Status Filter for Master Tables -->
+      <div class="filter-card">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="master-search-input" placeholder="Search across any field (food, restaurant, NGO, address, phone)..." oninput="app.filterMasterTable()">
+        </div>
+        <div class="filter-controls">
+          <select id="master-status-filter" onchange="app.filterMasterTable()">
+            <option value="ALL">Status: All Records</option>
+            <option value="AVAILABLE">Status: AVAILABLE</option>
+            <option value="CLAIMED">Status: CLAIMED</option>
+            <option value="COLLECTED">Status: COLLECTED</option>
+          </select>
+
+          <select id="master-category-filter" onchange="app.filterMasterTable()">
+            <option value="ALL">Category: All</option>
+            <option value="Cooked Meals">Cooked Meals</option>
+            <option value="Bakery & Breads">Bakery & Breads</option>
+            <option value="Fresh Produce">Fresh Produce</option>
+            <option value="Dairy & Beverages">Dairy & Beverages</option>
+            <option value="Packaged Food">Packaged Food</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Master Sub-Panes -->
+
+      <!-- 1. All Food Listings Table -->
+      <div id="subpane-all-listings" class="subpane-table card active">
+        <div class="table-title-row">
+          <h3>Master Table: Food Listings Entered by Restaurants</h3>
+          <span class="badge badge-light" id="listing-table-count">Showing 0 entries</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Food Item</th>
+                <th>Category</th>
+                <th>Servings</th>
+                <th>Dietary</th>
+                <th>Prepared At</th>
+                <th>Pickup Deadline</th>
+                <th>Restaurant & Location</th>
+                <th>Status</th>
+                <th>Claimed By</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="master-listings-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. All Claims Table -->
+      <div id="subpane-all-claims" class="subpane-table card">
+        <div class="table-title-row">
+          <h3>Master Table: Food Rescue Claims Submitted by NGOs</h3>
+          <span class="badge badge-light" id="claims-table-count">Showing 0 entries</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Claim ID</th>
+                <th>Listing ID</th>
+                <th>Food Item</th>
+                <th>Claiming NGO</th>
+                <th>Volunteer Name</th>
+                <th>Volunteer Phone</th>
+                <th>Estimated Arrival</th>
+                <th>Status</th>
+                <th>Submission Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="master-claims-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. All Restaurants Table -->
+      <div id="subpane-all-restaurants" class="subpane-table card">
+        <div class="table-title-row">
+          <h3>Master Table: Registered Restaurant Partners</h3>
+          <span class="badge badge-light" id="restaurants-table-count">Showing 0 entries</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Restaurant Name</th>
+                <th>Contact Person</th>
+                <th>Phone</th>
+                <th>Address & City</th>
+                <th>FSSAI License</th>
+                <th>Operating Hours</th>
+                <th>Verified</th>
+                <th>Registered At</th>
+              </tr>
+            </thead>
+            <tbody id="master-restaurants-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. All NGOs Table -->
+      <div id="subpane-all-ngos" class="subpane-table card">
+        <div class="table-title-row">
+          <h3>Master Table: Registered NGO & Shelter Partners</h3>
+          <span class="badge badge-light" id="ngos-table-count">Showing 0 entries</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NGO Organization</th>
+                <th>Reg / Trust ID</th>
+                <th>Contact Person</th>
+                <th>Phone</th>
+                <th>City & Address</th>
+                <th>Daily Beneficiaries</th>
+                <th>Vehicle Type</th>
+                <th>Registered At</th>
+              </tr>
+            </thead>
+            <tbody id="master-ngos-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. Live Audit Trail Table -->
+      <div id="subpane-all-logs" class="subpane-table card">
+        <div class="table-title-row">
+          <h3>Master Audit Log: Live Chronological Platform Activity</h3>
+          <span class="badge badge-light" id="logs-table-count">Showing 0 actions</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Log ID</th>
+                <th>Timestamp</th>
+                <th>Event Type</th>
+                <th>Actor Type</th>
+                <th>Actor Name</th>
+                <th>Action Description</th>
+              </tr>
+            </thead>
+            <tbody id="master-logs-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: SAFETY & TRUST (Slide 06)           -->
+    <!-- ========================================== -->
+    <section id="tab-safety-trust" class="tab-pane">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Food Safety & Partner Trust</h2>
+          <p class="section-desc">Slide 06: Food safety comes first. The platform supports coordination; it does not replace food-safety checks or local regulations.</p>
+        </div>
+      </div>
+
+      <div class="safety-grid">
+        <div class="safety-card card">
+          <div class="safety-icon">🍲</div>
+          <h3>Safe Food Only</h3>
+          <p>Restaurants should list only food that has been handled and stored safely and is suitable for donation. Food must be unconsumed, clean, and stored in hygienic containers.</p>
+          <ul class="guideline-list">
+            <li>Cooked meals kept either hot (>65°C) or chilled (<4°C).</li>
+            <li>No food that has been served on customer tables or buffet customer plates.</li>
+            <li>Packaged goods within safe shelf life with intact tamper seals.</li>
+          </ul>
+        </div>
+
+        <div class="safety-card card">
+          <div class="safety-icon">⏱️</div>
+          <h3>Clear Time Limits</h3>
+          <p>Every listing includes preparation details and a collection deadline. Expired listings are automatically retired to prevent stale pickups.</p>
+          <ul class="guideline-list">
+            <li>Max 2–4 hours pickup window for hot cooked food.</li>
+            <li>Best-before deadline mandatory for every single listing.</li>
+            <li>Auto-flagging when pickup deadline has elapsed.</li>
+          </ul>
+        </div>
+
+        <div class="safety-card card">
+          <div class="safety-icon">🛡️</div>
+          <h3>Verified Partners</h3>
+          <p>Restaurant and NGO profiles and contact details are vetted before they can publish or claim surplus food.</p>
+          <ul class="guideline-list">
+            <li>FSSAI / Food Authority registration checks for restaurants.</li>
+            <li>Registered NGO Trust deeds / 12A / 80G validation.</li>
+            <li>Dedicated coordinator phone numbers verified on dispatch.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Regulatory Notice from Slide 06 -->
+      <div class="alert-box card">
+        <div class="alert-icon">⚠️</div>
+        <div>
+          <h4>Important Regulatory & Compliance Notice (Slide 06)</h4>
+          <p>
+            Always follow applicable food-safety laws, municipal health guidelines, and local regulations.
+            Never distribute food that looks, smells, or is suspected of being unsafe. Both restaurants and NGOs maintain responsibility for physical inspection at the point of handoff.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 7: IMPACT DASHBOARD (Slide 07)         -->
+    <!-- ========================================== -->
+    <section id="tab-impact" class="tab-pane">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Expected & Realized Social Impact</h2>
+          <p class="section-desc">Slide 07: FoodBridge creates measurable value for restaurants, NGOs, communities, and the environment.</p>
+        </div>
+      </div>
+
+      <div class="impact-pillars-grid">
+        <div class="pillar-card card">
+          <span class="pillar-icon">🌱</span>
+          <h3>Less Food Waste</h3>
+          <p>More edible surplus food is redirected from landfills instead of contributing to greenhouse methane emissions.</p>
+          <div class="pillar-stat" id="impact-co2-stat">0 kg CO₂ Saved</div>
+        </div>
+
+        <div class="pillar-card card">
+          <span class="pillar-icon">🥣</span>
+          <h3>More Meal Access</h3>
+          <p>NGOs discover available food quickly and support low-income families, shelters, and orphanages in their area.</p>
+          <div class="pillar-stat" id="impact-meals-stat">0 Meals Provided</div>
+        </div>
+
+        <div class="pillar-card card">
+          <span class="pillar-icon">🤝</span>
+          <h3>Better Coordination</h3>
+          <p>A shared listing and status system eliminates countless calls, uncertainty, and missed pickups.</p>
+          <div class="pillar-stat" id="impact-pickups-stat">0 Rescues Completed</div>
+        </div>
+      </div>
+
+      <!-- Slide 08 Project Roadmap -->
+      <div class="roadmap-card card">
+        <h3>Project Roadmap & Phases (Slide 08)</h3>
+        <div class="phases-grid">
+          <div class="phase-col done">
+            <div class="phase-tag">PHASE 1 • COMPLETE</div>
+            <h4>Build the Basics</h4>
+            <p>Restaurant and NGO registration, food listing form, and available-food directory with live filters.</p>
+          </div>
+          <div class="phase-col done">
+            <div class="phase-tag">PHASE 2 • COMPLETE</div>
+            <h4>Enable Coordination</h4>
+            <p>Claim requests, volunteer ETA scheduling, pickup confirmation, and real-time listing status transitions.</p>
+          </div>
+          <div class="phase-col done">
+            <div class="phase-tag">PHASE 3 • COMPLETE</div>
+            <h4>Master Oversight & Pilot</h4>
+            <p>All-Entries Master Viewer, comprehensive database inspector, export to CSV/JSON, and impact tracking.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CLAIM MODAL (For NGOs to Claim Available Food) -->
+  <div id="claim-modal" class="modal-overlay hidden" onclick="app.closeModalOnClickOutside(event, 'claim-modal')">
+    <div class="modal-dialog card">
+      <div class="modal-header">
+        <div>
+          <span class="badge badge-accent">Claim Surplus Food</span>
+          <h3 id="modal-food-title">Claim Food Listing</h3>
+        </div>
+        <button class="modal-close-btn" onclick="app.closeModal('claim-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-listing-summary" class="listing-summary-box">
+          <!-- Populated dynamically -->
+        </div>
+
+        <form id="claim-form" onsubmit="app.handleClaimSubmit(event)">
+          <input type="hidden" id="claim-listing-id">
+
+          <div class="form-group">
+            <label for="claim-ngo-select">Select Claiming NGO *</label>
+            <select id="claim-ngo-select" required onchange="app.onNgoSelectInClaim(this.value)">
+              <option value="">-- Choose Your NGO Profile --</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="claim-volunteer-name">Volunteer / Driver Name *</label>
+              <input type="text" id="claim-volunteer-name" required placeholder="e.g. Ramesh Jadhav">
+            </div>
+            <div class="form-group flex-1">
+              <label for="claim-volunteer-phone">Volunteer Contact Phone *</label>
+              <input type="text" id="claim-volunteer-phone" required placeholder="e.g. +91 98205 77669">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="claim-eta">Estimated Pickup Arrival Time *</label>
+            <input type="text" id="claim-eta" required placeholder="e.g. Today 7:15 PM (in 45 minutes)">
+          </div>
+
+          <div class="form-group">
+            <label for="claim-notes">Pickup Notes / Vehicle details</label>
+            <input type="text" id="claim-notes" placeholder="e.g. Arriving in Maruti Eeco with 3 thermal insulated food boxes">
+          </div>
+
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary btn-lg">
+              <span>🤝</span> Confirm Food Claim & Reserve Pickup
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="app.closeModal('claim-modal')">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAILS MODAL (To view any entry in full detail) -->
+  <div id="details-modal" class="modal-overlay hidden" onclick="app.closeModalOnClickOutside(event, 'details-modal')">
+    <div class="modal-dialog card modal-lg">
+      <div class="modal-header">
+        <h3 id="details-modal-title">Entry Details</h3>
+        <button class="modal-close-btn" onclick="app.closeModal('details-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="details-modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <strong>FoodBridge</strong> — Social Impact Food Rescue Platform
+        <p>Connecting restaurants with NGOs to rescue surplus food and deliver it to people who need it.</p>
+      </div>
+      <div class="footer-links">
+        <span>Slide 01–08 Implementation</span>
+        <span>•</span>
+        <span>Node.js & SQLite Native Platform</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

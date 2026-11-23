@@ -1,0 +1,19 @@
+{
+  "name": "foodbridge",
+  "version": "1.0.0",
+  "description": "Social impact surplus food rescue platform connecting restaurants and NGOs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "foodbridge",
+    "food-rescue",
+    "social-impact",
+    "ngo",
+    "restaurant-surplus"
+  ],
+  "author": "FoodBridge Team",
+  "license": "MIT"
+}
